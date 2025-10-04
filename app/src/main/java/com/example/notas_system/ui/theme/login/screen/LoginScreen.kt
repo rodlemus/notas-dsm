@@ -15,11 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import com.example.notas_system.ui.theme.login.viewmodel.LoginViewModel
+import com.example.notas_system.viewmodel.AuthViewModel
 
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel, onLoginSuccess: () -> Unit){
+fun LoginScreen(viewModel: AuthViewModel, onLoginSuccess: () -> Unit, onGoToSignUp: () -> Unit){
     Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
         TextField(
             value = viewModel.username,
@@ -47,10 +47,7 @@ fun LoginScreen(viewModel: LoginViewModel, onLoginSuccess: () -> Unit){
 
             Spacer(modifier = Modifier.height(8.dp)) // espacio entre botones
 
-            Button(onClick = {
-                viewModel.register()
-                if (viewModel.isLoggedIn) onLoginSuccess()
-            }) {
+            Button(onClick = onGoToSignUp) {
                 Text("Registrarse")
             }
         }

@@ -1,4 +1,4 @@
-package com.example.notas_system.ui.theme.login.viewmodel
+package com.example.notas_system.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.notas_system.data.models.Usuario
 import com.example.notas_system.data.repository.UserRepository
 
-class LoginViewModel: ViewModel() {
+class AuthViewModel: ViewModel() {
     var username by mutableStateOf("")
     var password by mutableStateOf("")
     var isLoggedIn by mutableStateOf(false)
