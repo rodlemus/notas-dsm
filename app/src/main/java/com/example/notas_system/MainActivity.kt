@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.notas_system.ui.theme.Notas_systemTheme
 import com.example.notas_system.ui.theme.login.screen.LoginScreen
+import com.example.notas_system.ui.theme.notas.screen.NotasScreen
 import com.example.notas_system.ui.theme.signup.screen.SignupScreen
 import com.example.notas_system.viewmodel.AuthViewModel
 
@@ -30,8 +31,10 @@ class MainActivity : ComponentActivity() {
                 "login" -> LoginScreen (viewModel = authViewModel, onLoginSuccess = { currentScreen = "notas"}, onGoToSignUp = {currentScreen = "signup"})
                 "signup" -> SignupScreen(
                     viewModel = authViewModel,
-                    onGoToLogin = { currentScreen = "login" }
+                    onGoToLogin = { currentScreen = "login" },
+                    onSuccessSignup = { currentScreen = "notas"}
                 )
+                "notas" -> NotasScreen()
             }
         }
     }

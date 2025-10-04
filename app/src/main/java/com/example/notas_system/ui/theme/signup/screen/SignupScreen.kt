@@ -27,9 +27,8 @@ import com.example.notas_system.data.repository.UserRepository
 import com.example.notas_system.viewmodel.AuthViewModel
 
 @Composable
-fun SignupScreen(viewModel: AuthViewModel, onGoToLogin: () -> Unit){
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun SignupScreen(viewModel: AuthViewModel, onGoToLogin: () -> Unit, onSuccessSignup: () -> Unit){
+
     var confirmPassword by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
 
@@ -48,16 +47,16 @@ fun SignupScreen(viewModel: AuthViewModel, onGoToLogin: () -> Unit){
         Spacer(modifier = Modifier.height(20.dp))
 
         TextField(
-            value = username,
-            onValueChange = { username = it },
+            value = viewModel.username,
+            onValueChange = { viewModel.username = it },
             label = { Text("Usuario") }
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         TextField(
-            value = password,
-            onValueChange = { password = it },
+            value = viewModel.password,
+            onValueChange = { viewModel.password = it },
             label = { Text("Contraseña") },
             visualTransformation = PasswordVisualTransformation()
         )
@@ -74,12 +73,12 @@ fun SignupScreen(viewModel: AuthViewModel, onGoToLogin: () -> Unit){
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(onClick = {
-            if (username.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
+            if (viewModel.username.isBlank() || viewModel.password.isBlank() || confirmPassword.isBlank()) {
                 errorMessage = "Completa todos los campos"
-            } else if (password != confirmPassword) {
+            } else if (viewModel.password != confirmPassword) {
                 errorMessage = "Las contraseñas no coinciden"
             } else {
-                val user = Usuario(username, password)
+                val user = Usuario(viewModel.username, viewModel.password)
                 val success = UserRepository.register(user)
                 if (success) {
                     errorMessage = ""
@@ -87,6 +86,8 @@ fun SignupScreen(viewModel: AuthViewModel, onGoToLogin: () -> Unit){
                     errorMessage = "El usuario ya existe"
                 }
             }
+
+            onSuccessSignup()
         }) {
             Text("Registrarse")
         }
