@@ -12,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.notas_system.ui.theme.Notas_systemTheme
 import com.example.notas_system.ui.theme.login.screen.LoginScreen
 import com.example.notas_system.ui.theme.notas.screen.NotasScreen
 import com.example.notas_system.ui.theme.signup.screen.SignupScreen
