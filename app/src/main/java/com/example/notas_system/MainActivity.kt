@@ -16,9 +16,11 @@ import com.example.notas_system.ui.theme.login.screen.LoginScreen
 import com.example.notas_system.ui.theme.notas.screen.NotasScreen
 import com.example.notas_system.ui.theme.signup.screen.SignupScreen
 import com.example.notas_system.viewmodel.AuthViewModel
+import com.example.notas_system.viewmodel.NotasViewModel
 
 class MainActivity : ComponentActivity() {
     private val authViewModel = AuthViewModel()
+    private val notasViewModel = NotasViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +35,7 @@ class MainActivity : ComponentActivity() {
                     onGoToLogin = { currentScreen = "login" },
                     onSuccessSignup = { currentScreen = "notas"}
                 )
-                "notas" -> NotasScreen()
+                "notas" -> NotasScreen(notasViewModel)
             }
         }
     }
