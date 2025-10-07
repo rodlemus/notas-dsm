@@ -1,13 +1,16 @@
 package com.example.notas_system.ui.theme.notas.screen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -20,14 +23,79 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
+import com.example.notas_system.viewmodel.AuthViewModel
 import com.example.notas_system.viewmodel.NotasViewModel
 
 @Composable
-fun NotasScreen(viewModel: NotasViewModel) {
+fun NotasScreen(viewModel: NotasViewModel, authViewModel: AuthViewModel, onLogout: () -> Unit) {
     var actividadInput by remember { mutableStateOf("") }
     var notaInput by remember { mutableStateOf("") }
     var mensajeError by remember { mutableStateOf("") }
+
+    var showDialog by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp)
+    ) {
+        Button(
+            onClick = { showDialog = true },
+            modifier = Modifier
+                .align(Alignment.TopEnd) // ⬅ aquí lo ponemos arriba a la derecha
+                .padding(16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Red,
+                    contentColor = Color.White
+                )
+        ) {
+            Text("Cerrar Sesión")
+        }
+
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = { Text("Cerrar Sesión") },
+                text = { Text("¿Estás seguro de que quieres cerrar sesión?") },
+                confirmButton = {
+                    Button(onClick = {
+                        showDialog = false
+                        onLogout()
+                    },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Red,
+                            contentColor = Color.White
+                        )
+                        ) {
+                        Text("Salir")
+                    }
+                },
+                dismissButton = {
+                    Button(onClick = { showDialog = false }) {
+                        Text("Cancelar")
+                    }
+                }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(64.dp)
+    ) {
+        Text(
+            text = if (authViewModel.currentUser != null)
+                "Bienvenido/a ${authViewModel.currentUser!!.nombres} ${authViewModel.currentUser!!.apellidos}"
+            else
+                "Bienvenido/a",
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
 
     Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
 

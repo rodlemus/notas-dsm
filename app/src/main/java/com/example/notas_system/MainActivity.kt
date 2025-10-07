@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.notas_system.ui.navigation.AppNavigation
 import com.example.notas_system.ui.theme.login.screen.LoginScreen
 import com.example.notas_system.ui.theme.notas.screen.NotasScreen
 import com.example.notas_system.ui.theme.signup.screen.SignupScreen
@@ -26,17 +27,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            var currentScreen by remember { mutableStateOf("login") }
+            val viewModel = AuthViewModel()
+            viewModel.cargarUsuarios(this)
 
-            when (currentScreen) {
-                "login" -> LoginScreen (viewModel = authViewModel, onLoginSuccess = { currentScreen = "notas"}, onGoToSignUp = {currentScreen = "signup"})
-                "signup" -> SignupScreen(
-                    viewModel = authViewModel,
-                    onGoToLogin = { currentScreen = "login" },
-                    onSuccessSignup = { currentScreen = "notas"}
-                )
-                "notas" -> NotasScreen(notasViewModel)
-            }
+            // Aqui llamamos al navhost central
+            AppNavigation(viewModel, this)
         }
     }
 }

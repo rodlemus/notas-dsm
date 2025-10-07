@@ -1,22 +1,29 @@
 package com.example.notas_system.data.repository
 
+import android.content.Context
 import com.example.notas_system.data.models.Usuario
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.io.File
 
 object UserRepository {
-    private val users = mutableListOf<Usuario>()
+    private const val FILE_NAME = "users.json"
+    private val gson = Gson()
 
-    init {
-        //test user
-        users.add(Usuario("root","toor"))
+    private fun getFile(context: Context): File {
+        return File(context.filesDir, FILE_NAME)
     }
 
-    fun register(user: Usuario): Boolean {
-        if (users.any { it.username == user.username }) return false
-        users.add(user)
-        return true
+    fun cargarUsuarios(context: Context): MutableList<Usuario> {
+        val file = getFile(context)
+        if (!file.exists()) return mutableListOf()
+        val json = file.reader()
+        val type = object : TypeToken<MutableList<Usuario>>() {}.type
+        return gson.fromJson(json, type) ?: mutableListOf()
     }
 
-    fun login(username: String, password: String): Boolean {
-        return users.any { it.username == username && it.password == password }
+    fun guardarUsuarios(context: Context, users: List<Usuario>) {
+        val file = getFile(context)
+        file.writeText((gson.toJson(users)))
     }
 }

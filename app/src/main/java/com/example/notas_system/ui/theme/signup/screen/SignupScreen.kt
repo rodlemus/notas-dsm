@@ -1,5 +1,7 @@
 package com.example.notas_system.ui.theme.signup.screen
 
+import android.content.Context
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -27,80 +30,63 @@ import com.example.notas_system.data.repository.UserRepository
 import com.example.notas_system.viewmodel.AuthViewModel
 
 @Composable
-fun SignupScreen(viewModel: AuthViewModel, onGoToLogin: () -> Unit, onSuccessSignup: () -> Unit){
-
-    var confirmPassword by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf("") }
+fun SignupScreen(viewModel: AuthViewModel, context: Context, onRegisterSuccess: () -> Unit, onNavigateToLogin: () -> Unit){
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = "Crear Cuenta",
-            style = MaterialTheme.typography.headlineSmall
+        OutlinedTextField(
+            value = viewModel.nombres,
+            onValueChange = { viewModel.nombres = it },
+            label = { Text("Nombres") }
         )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        TextField(
-            value = viewModel.username,
-            onValueChange = { viewModel.username = it },
-            label = { Text("Usuario") }
+        OutlinedTextField(
+            value = viewModel.apellidos,
+            onValueChange = { viewModel.apellidos = it },
+            label = { Text("Apellidos") }
         )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        TextField(
+        OutlinedTextField(
+            value = viewModel.correo,
+            onValueChange = { viewModel.correo = it },
+            label = { Text("Correo") }
+        )
+        OutlinedTextField(
             value = viewModel.password,
             onValueChange = { viewModel.password = it },
             label = { Text("Contraseña") },
             visualTransformation = PasswordVisualTransformation()
         )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        TextField(
-            value = confirmPassword,
-            onValueChange = { confirmPassword = it },
-            label = { Text("Confirmar contraseña") },
+        OutlinedTextField(
+            value = viewModel.confirmarPassword,
+            onValueChange = { viewModel.confirmarPassword = it },
+            label = { Text("Confirmar Contraseña") },
             visualTransformation = PasswordVisualTransformation()
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            if (viewModel.username.isBlank() || viewModel.password.isBlank() || confirmPassword.isBlank()) {
-                errorMessage = "Completa todos los campos"
-            } else if (viewModel.password != confirmPassword) {
-                errorMessage = "Las contraseñas no coinciden"
-            } else {
-                val user = Usuario(viewModel.username, viewModel.password)
-                val success = UserRepository.register(user)
-                if (success) {
-                    errorMessage = ""
-                } else {
-                    errorMessage = "El usuario ya existe"
-                }
-            }
-
-            onSuccessSignup()
+            viewModel.register(context)
+            if (viewModel.isLoggedIn) onRegisterSuccess()
         }) {
             Text("Registrarse")
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
-
-        TextButton(onClick = onGoToLogin) {
-            Text("Ya tengo una cuenta")
+        if (viewModel.registerErrorMessage.isNotEmpty()) {
+            Text(viewModel.registerErrorMessage, color = Color.Red)
         }
 
-        if (errorMessage.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(errorMessage, color = Color.Red)
-        }
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // 🔹 Texto para ir al login
+        Text(
+            text = "¿Ya tienes una cuenta? Inicia Sesión",
+            color = Color.Blue,
+            modifier = Modifier.clickable { onNavigateToLogin() }
+        )
     }
 }
