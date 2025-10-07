@@ -23,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import com.example.notas_system.viewmodel.AuthViewModel
 import com.example.notas_system.viewmodel.NotasViewModel
@@ -35,6 +34,8 @@ fun NotasScreen(viewModel: NotasViewModel, authViewModel: AuthViewModel, onLogou
     var mensajeError by remember { mutableStateOf("") }
 
     var showDialog by remember { mutableStateOf(false) }
+
+    val user = authViewModel.currentUser
 
     Box(
         modifier = Modifier
@@ -86,13 +87,10 @@ fun NotasScreen(viewModel: NotasViewModel, authViewModel: AuthViewModel, onLogou
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(64.dp)
+            .padding(72.dp, 128.dp)
     ) {
         Text(
-            text = if (authViewModel.currentUser != null)
-                "Bienvenido/a ${authViewModel.currentUser!!.nombres} ${authViewModel.currentUser!!.apellidos}"
-            else
-                "Bienvenido/a",
+            text = user?.let { "Bienvenido/a ${it.nombres} ${it.apellidos}" } ?: "Bienvenido/a",
             style = MaterialTheme.typography.titleMedium
         )
     }

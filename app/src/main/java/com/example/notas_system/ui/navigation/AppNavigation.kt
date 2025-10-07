@@ -17,7 +17,6 @@ fun AppNavigation(viewModel: AuthViewModel, context: Context) {
 
     NavHost(navController = navController, startDestination = "login") {
         composable("login") {
-            viewModel.logout()
             LoginScreen(
                 viewModel = viewModel,
                 context = context,
@@ -40,7 +39,7 @@ fun AppNavigation(viewModel: AuthViewModel, context: Context) {
         composable("notas") {
             NotasScreen(
                 viewModel = NotasViewModel(),
-                authViewModel = AuthViewModel(),
+                authViewModel = viewModel,
                 onLogout = {
                     viewModel.logout()
                     navController.navigate("login") {

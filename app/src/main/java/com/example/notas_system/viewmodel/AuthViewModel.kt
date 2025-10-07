@@ -19,7 +19,7 @@ class AuthViewModel: ViewModel() {
     var registerErrorMessage by mutableStateOf("")
     var isLoggedIn by mutableStateOf(false)
 
-    var currentUser: Usuario? = null
+    var currentUser by mutableStateOf<Usuario?>(null)
 
     private var users = mutableListOf<Usuario>()
 
@@ -52,8 +52,10 @@ class AuthViewModel: ViewModel() {
         if (user != null) {
             isLoggedIn = true
             currentUser = user
+            println("Usuario logueado: ${currentUser?.nombres} ${currentUser?.apellidos}")
             loginErrorMessage = ""
         } else {
+            isLoggedIn = false
             currentUser = null
             loginErrorMessage = "Correo o contraseña incorrectos"
         }
@@ -61,6 +63,11 @@ class AuthViewModel: ViewModel() {
 
     fun register(context: Context) {
         users = UserRepository.cargarUsuarios(context)
+
+        if (!isValidEmail(correo)) {
+            registerErrorMessage = "El correo ingresado no es válido"
+            return
+        }
 
         if (nombres.isBlank() || apellidos.isBlank() || correo.isBlank() || password.isBlank() || confirmarPassword.isBlank()) {
             registerErrorMessage = "Todos los campos son obligatorios"
@@ -78,6 +85,7 @@ class AuthViewModel: ViewModel() {
 
         registerErrorMessage = ""
         isLoggedIn = true
+        currentUser = nuevoUsuario
     }
 
     fun logout() {
