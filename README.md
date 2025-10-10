@@ -1,5 +1,5 @@
 # Sistema de ingreso de notas
-_Este proyecto es una aplicación móvil, un sistema de ingreso de notas con lógica de inicio de sesión y registro de usuarios. Desarrollado con Kotlin en Android Studio.
+_Este proyecto es una aplicación móvil, un sistema de ingreso de notas con lógica de inicio de sesión y registro de usuarios. Desarrollado con Kotlin en Android Studio._
 
 ### Integrantes:
 * Eduardo Rodrigo Lemus Escalante - LE240440
